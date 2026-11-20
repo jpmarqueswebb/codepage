@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-pure: #000000;
+    --card-surface: #070708;
+    --card-raised: #0d0d10;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(255, 255, 255, 0.22);
+  }
+
+  * {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    background-color: #000000;
+    color: #EDEDED;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Custom scrollbar for noir aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #222226;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #44444a;
+}
+
+/* Noir scanline & subtle noise overlay */
+.noir-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.noir-glow-white {
+  box-shadow: 0 0 25px -4px rgba(255, 255, 255, 0.25);
+}
+
+.noir-glow-sm {
+  box-shadow: 0 0 15px -2px rgba(255, 255, 255, 0.15);
+}
+
+.noir-glow-strong {
+  box-shadow: 0 0 40px -5px rgba(255, 255, 255, 0.35);
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes laser-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-laser-spin {
+  animation: laser-spin 4s linear infinite;
+}
+
+@keyframes text-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-text-shimmer {
+  background: linear-gradient(90deg, #666 0%, #fff 50%, #666 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: text-shimmer 3s ease-in-out infinite;
+}
