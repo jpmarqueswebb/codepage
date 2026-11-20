@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Plus, Sparkles, Download, Upload, Terminal } from 'lucide-react';
+import { Search, Plus, Sparkles, Download, Upload, Code2 } from 'lucide-react';
 
 export function Header({ 
   search, 
@@ -23,19 +23,19 @@ export function Header({
           {/* Logo & Identity */}
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-white text-black flex items-center justify-center font-black tracking-tighter shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-              FX
+              <Code2 className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-bold tracking-tight text-white font-['Space_Grotesk']">
-                  NOIR // FX VAULT
+                  CODEPAGE
                 </h1>
                 <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 border border-white/15">
-                  Pro Max
+                  Studio
                 </span>
               </div>
               <p className="text-xs text-neutral-400">
-                Efeitos de Alta Conversão para Landing Pages & Prompts para IA
+                Códigos & Efeitos para Landing Pages e Sites de Alta Conversão
               </p>
             </div>
           </div>
@@ -47,7 +47,7 @@ export function Header({
               <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Buscar efeito, tag ou stack..."
+                placeholder="Buscar código, efeito ou tag..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 bg-neutral-950 border border-white/15 rounded-xl text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all"
@@ -57,13 +57,13 @@ export function Header({
             {/* Export & Import buttons */}
             <button
               onClick={onExport}
-              title="Exportar catálogo em JSON"
+              title="Exportar códigos em JSON"
               className="p-2 rounded-xl bg-neutral-950 border border-white/10 text-neutral-400 hover:text-white hover:border-white/30 transition-colors"
             >
               <Download className="w-4 h-4" />
             </button>
             <label
-              title="Importar catálogo JSON"
+              title="Importar códigos JSON"
               className="p-2 rounded-xl bg-neutral-950 border border-white/10 text-neutral-400 hover:text-white hover:border-white/30 transition-colors cursor-pointer"
             >
               <Upload className="w-4 h-4" />
@@ -76,7 +76,7 @@ export function Header({
               className="flex items-center gap-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:bg-neutral-200 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
               <Plus className="w-4 h-4" />
-              <span>Novo Efeito</span>
+              <span>Novo Código / Efeito</span>
             </button>
           </div>
         </div>

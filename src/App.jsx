@@ -7,14 +7,14 @@ import { PromptModal } from './components/PromptModal';
 import { DetailModal } from './components/DetailModal';
 import { AddEffectModal } from './components/AddEffectModal';
 import { Toast } from './components/Toast';
-import { Sparkles, Terminal, Layers, RefreshCw, Zap, Shield, ArrowUpRight } from 'lucide-react';
+import { Sparkles, Terminal, Layers, RefreshCw, Zap, Shield, ArrowUpRight, Code2 } from 'lucide-react';
 
-const STORAGE_KEY = 'fx_vault_effects_v1';
+const STORAGE_KEY = 'codepage_effects_v1';
 
 export default function App() {
   const [effects, setEffects] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('fx_vault_effects_v1');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -122,7 +122,7 @@ ${code}
   // Add new effect
   const handleSaveNewEffect = (newEffect) => {
     setEffects([newEffect, ...effects]);
-    showToast('Efeito Salvo!', `"${newEffect.name}" adicionado ao seu Vault.`);
+    showToast('Efeito Salvo!', `"${newEffect.name}" adicionado ao CodePage.`);
   };
 
   // Export JSON
@@ -130,11 +130,11 @@ ${code}
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(effects, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', 'noir-fx-vault-backup.json');
+    downloadAnchor.setAttribute('download', 'codepage-backup.json');
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-    showToast('Catálogo Exportado!', 'Arquivo noir-fx-vault-backup.json baixado.');
+    showToast('Catálogo Exportado!', 'Arquivo codepage-backup.json baixado.');
   };
 
   // Import JSON
@@ -158,7 +158,7 @@ ${code}
 
   // Reset to default
   const handleResetToDefault = () => {
-    if (window.confirm('Deseja restaurar a biblioteca original com todos os efeitos do Marcelo Cabral e do Neon Noir?')) {
+    if (window.confirm('Deseja restaurar os códigos e efeitos padrão do Marcelo Cabral e Neon Noir?')) {
       setEffects(initialEffects);
       showToast('Biblioteca Restaurada', 'Efeitos padrão restabelecidos.');
     }
@@ -191,15 +191,15 @@ ${code}
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15 text-neutral-300 text-xs font-mono shadow-[0_0_25px_rgba(255,255,255,0.06)]">
             <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#fff] animate-pulse" />
-            <span>Sistema Anti-IA Slop • Baseado no UI UX Pro Max v2.0</span>
+            <span>Anti-IA Slop • Baseado no UI UX Pro Max v2.0</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white font-['Space_Grotesk'] leading-[1.1]">
-            O Vault de Efeitos das suas Landing Pages
+            O Acervo de Códigos e Efeitos das suas Páginas
           </h2>
 
           <p className="max-w-2xl mx-auto text-sm sm:text-base text-neutral-400 leading-relaxed">
-            Selecione qualquer efeito, defina a seção do site no card e clique em 
+            Selecione qualquer código de efeito, defina a seção do site no card e clique em 
             <strong className="text-white font-semibold"> "Copiar Prompt para IA"</strong>. 
             O prompt já sai formatado com as instruções para a IA replicar 100% igual.
           </p>
@@ -207,7 +207,7 @@ ${code}
           {/* Quick Metrics Bar */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-neutral-400">
             <div className="flex items-center gap-2">
-              <span className="text-white font-bold">{effects.length}</span> Efeitos Catalogados
+              <span className="text-white font-bold">{effects.length}</span> Códigos & Efeitos
             </div>
             <div className="h-3 w-px bg-white/20" />
             <div className="flex items-center gap-2">
@@ -215,7 +215,7 @@ ${code}
             </div>
             <div className="h-3 w-px bg-white/20" />
             <div className="flex items-center gap-2">
-              <span className="text-white font-bold">60 FPS</span> Aceleração por GPU
+              <span className="text-white font-bold">60 FPS</span> Aceleração por Hardware
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ ${code}
               Exibindo:
             </span>
             <span className="text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded border border-white/10">
-              {filteredEffects.length} {filteredEffects.length === 1 ? 'efeito' : 'efeitos'}
+              {filteredEffects.length} {filteredEffects.length === 1 ? 'código' : 'códigos'}
             </span>
           </div>
 
@@ -260,7 +260,7 @@ ${code}
           </div>
         ) : (
           <div className="text-center py-24 border border-dashed border-white/15 rounded-2xl bg-neutral-950/40 p-8">
-            <p className="text-base font-semibold text-white">Nenhum efeito encontrado</p>
+            <p className="text-base font-semibold text-white">Nenhum código encontrado</p>
             <p className="text-xs text-neutral-400 mt-1">Tente buscar por outro termo ou limpe os filtros de categoria.</p>
             <button
               onClick={() => { setSearch(''); setSelectedCategory('all'); }}
@@ -277,12 +277,12 @@ ${code}
       <footer className="border-t border-white/10 bg-black py-8 px-4 sm:px-6 lg:px-8 text-xs text-neutral-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white font-['Space_Grotesk']">NOIR // FX VAULT</span>
+            <span className="font-bold text-white font-['Space_Grotesk']">CODEPAGE</span>
             <span>•</span>
-            <span>Estilo Preto & Branco Neon Noir</span>
+            <span>Códigos & Efeitos para Landing Pages</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>Desenvolvido com o UI UX Pro Max Skill v2.0</span>
+            <span>Desenvolvido com UI UX Pro Max Skill v2.0</span>
           </div>
         </div>
       </footer>
