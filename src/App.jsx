@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import { initialEffects } from './data/initialEffects';
-import { Header } from './components/Header';
 import { EffectCard } from './components/EffectCard';
 import { PromptModal } from './components/PromptModal';
 import { DetailModal } from './components/DetailModal';
-import { AddEffectModal } from './components/AddEffectModal';
 import { Toast } from './components/Toast';
-import { Sparkles, Terminal, Layers, RefreshCw, Zap, Shield, ArrowUpRight, Code2 } from 'lucide-react';
+import { Search, RefreshCw, Sparkles, Terminal, Layers, ArrowUpRight } from 'lucide-react';
 
 const STORAGE_KEY = 'codepage_effects_v1';
 
@@ -29,9 +27,8 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Modals state
-  const [activePromptModal, setActivePromptModal] = useState(null); // { effect, section }
-  const [activeDetailModal, setActiveDetailModal] = useState(null); // effect
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [activePromptModal, setActivePromptModal] = useState(null);
+  const [activeDetailModal, setActiveDetailModal] = useState(null);
   const [toast, setToast] = useState(null);
 
   // Save to localStorage whenever effects change
@@ -50,7 +47,7 @@ export default function App() {
 
   // Categories definition
   const categories = useMemo(() => {
-    const list = [
+    return [
       { id: 'all', label: 'Todos os Efeitos', count: effects.length },
       { id: 'marcelo-cabral', label: 'Efeitos Marcelo Cabral', count: effects.filter(e => e.category === 'marcelo-cabral').length },
       { id: 'cards-borders', label: 'Cards & Bordas', count: effects.filter(e => e.category === 'cards-borders').length },
@@ -59,7 +56,6 @@ export default function App() {
       { id: 'typography', label: 'Texto & Tipografia', count: effects.filter(e => e.category === 'typography').length },
       { id: 'navigation', label: 'Modais & Menus', count: effects.filter(e => e.category === 'navigation').length },
     ];
-    return list;
   }, [effects]);
 
   // Filtered effects list
@@ -119,46 +115,9 @@ ${code}
     showToast('Código Copiado!', `${effect.name} copiado para a área de transferência.`);
   };
 
-  // Add new effect
-  const handleSaveNewEffect = (newEffect) => {
-    setEffects([newEffect, ...effects]);
-    showToast('Efeito Salvo!', `"${newEffect.name}" adicionado ao CodePage.`);
-  };
-
-  // Export JSON
-  const handleExport = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(effects, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', 'codepage-backup.json');
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    showToast('Catálogo Exportado!', 'Arquivo codepage-backup.json baixado.');
-  };
-
-  // Import JSON
-  const handleImport = (e) => {
-    const fileReader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      fileReader.readAsText(e.target.files[0], 'UTF-8');
-      fileReader.onload = (event) => {
-        try {
-          const parsed = JSON.parse(event.target.result);
-          if (Array.isArray(parsed)) {
-            setEffects(parsed);
-            showToast('Catálogo Importado!', `${parsed.length} efeitos carregados com sucesso.`);
-          }
-        } catch (err) {
-          showToast('Erro ao importar', 'O arquivo JSON selecionado é inválido.');
-        }
-      };
-    }
-  };
-
   // Reset to default
   const handleResetToDefault = () => {
-    if (window.confirm('Deseja restaurar os códigos e efeitos padrão do Marcelo Cabral e Neon Noir?')) {
+    if (window.confirm('Deseja restaurar os códigos e efeitos padrão?')) {
       setEffects(initialEffects);
       showToast('Biblioteca Restaurada', 'Efeitos padrão restabelecidos.');
     }
@@ -167,26 +126,13 @@ ${code}
   return (
     <div className="min-h-screen bg-black text-neutral-100 flex flex-col font-sans selection:bg-white selection:text-black">
       
-      {/* Global Header */}
-      <Header
-        search={search}
-        setSearch={setSearch}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        categories={categories}
-        totalEffects={effects.length}
-        onOpenAddModal={() => setIsAddModalOpen(true)}
-        onExport={handleExport}
-        onImport={handleImport}
-      />
-
-      {/* Hero Banner Showcase */}
-      <section className="relative border-b border-white/10 bg-gradient-to-b from-neutral-950/60 to-black overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
+      {/* Hero Banner Showcase (Sem Header acima) */}
+      <section className="relative border-b border-white/10 bg-gradient-to-b from-neutral-950/80 via-black to-black overflow-hidden pt-16 pb-14 px-4 sm:px-6 lg:px-8">
         {/* Subtle Noir Grid Background */}
         <div className="absolute inset-0 noir-grid opacity-30 pointer-events-none" />
         
         {/* Ambient Top Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-white/5 blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[650px] h-36 bg-white/5 blur-3xl pointer-events-none rounded-full" />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15 text-neutral-300 text-xs font-mono shadow-[0_0_25px_rgba(255,255,255,0.06)]">
@@ -194,9 +140,9 @@ ${code}
             <span>Anti-IA Slop • Baseado no UI UX Pro Max v2.0</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white font-['Space_Grotesk'] leading-[1.1]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white font-['Space_Grotesk'] leading-[1.08]">
             O Acervo de Códigos e Efeitos das suas Páginas
-          </h2>
+          </h1>
 
           <p className="max-w-2xl mx-auto text-sm sm:text-base text-neutral-400 leading-relaxed">
             Selecione qualquer código de efeito, defina a seção do site no card e clique em 
@@ -221,28 +167,69 @@ ${code}
         </div>
       </section>
 
-      {/* Main Content: Effects Grid */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Main Content: Controls + Effects Grid */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         
-        {/* Grid Header Info */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
-              Exibindo:
-            </span>
-            <span className="text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded border border-white/10">
-              {filteredEffects.length} {filteredEffects.length === 1 ? 'código' : 'códigos'}
-            </span>
+        {/* Controls Bar: Busca + Filtros por Categoria logo acima dos códigos */}
+        <div className="space-y-4 rounded-2xl bg-[#070709] border border-white/10 p-5 shadow-xl">
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Search Input */}
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Buscar código, efeito, palavra-chave ou tag..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-neutral-950 border border-white/15 rounded-xl text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all font-sans"
+              />
+            </div>
+
+            {/* Quick Status / Reset */}
+            <div className="flex items-center justify-between md:justify-end gap-3 text-xs">
+              <span className="text-xs font-bold text-white bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 font-mono">
+                {filteredEffects.length} {filteredEffects.length === 1 ? 'efeito' : 'efeitos'}
+              </span>
+
+              <button
+                onClick={handleResetToDefault}
+                className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors py-1.5 px-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10"
+                title="Restaurar efeitos padrão"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Restaurar</span>
+              </button>
+            </div>
           </div>
 
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-white transition-colors"
-            title="Restaurar efeitos padrão"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Restaurar Padrões</span>
-          </button>
+          {/* Categories Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pt-2 pb-1 no-scrollbar text-xs border-t border-white/5">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? 'bg-white text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.3)]'
+                      : 'bg-neutral-950 text-neutral-400 border border-white/10 hover:text-white hover:border-white/30'
+                  }`}
+                >
+                  {cat.label}
+                  {cat.count !== undefined && (
+                    <span className={`ml-1.5 text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                      isActive ? 'bg-black/20 text-black' : 'bg-white/10 text-neutral-400'
+                    }`}>
+                      {cat.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
         </div>
 
         {/* Cards Grid */}
@@ -259,7 +246,7 @@ ${code}
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 border border-dashed border-white/15 rounded-2xl bg-neutral-950/40 p-8">
+          <div className="text-center py-20 border border-dashed border-white/15 rounded-2xl bg-neutral-950/40 p-8">
             <p className="text-base font-semibold text-white">Nenhum código encontrado</p>
             <p className="text-xs text-neutral-400 mt-1">Tente buscar por outro termo ou limpe os filtros de categoria.</p>
             <button
@@ -273,7 +260,7 @@ ${code}
 
       </main>
 
-      {/* Footer */}
+      {/* Footer Minimalista */}
       <footer className="border-t border-white/10 bg-black py-8 px-4 sm:px-6 lg:px-8 text-xs text-neutral-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -303,13 +290,6 @@ ${code}
           onClose={() => setActiveDetailModal(null)}
           onCopyPrompt={handleCopyPrompt}
           onCopyCode={handleCopyCode}
-        />
-      )}
-
-      {isAddModalOpen && (
-        <AddEffectModal
-          onClose={() => setIsAddModalOpen(false)}
-          onSave={handleSaveNewEffect}
         />
       )}
 
