@@ -7,12 +7,12 @@ import { DetailModal } from './components/DetailModal';
 import { Toast } from './components/Toast';
 import { Search, RefreshCw, Sparkles, Terminal, Layers, ArrowUpRight } from 'lucide-react';
 
-const STORAGE_KEY = 'codepage_effects_v1';
+const STORAGE_KEY = 'codepage_effects_v2';
 
 export default function App() {
   const [effects, setEffects] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('fx_vault_effects_v1');
+      const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -49,7 +49,6 @@ export default function App() {
   const categories = useMemo(() => {
     return [
       { id: 'all', label: 'Todos os Efeitos', count: effects.length },
-      { id: 'marcelo-cabral', label: 'Efeitos Marcelo Cabral', count: effects.filter(e => e.category === 'marcelo-cabral').length },
       { id: 'cards-borders', label: 'Cards & Bordas', count: effects.filter(e => e.category === 'cards-borders').length },
       { id: 'hero-fundos', label: 'Heróis & Fundos', count: effects.filter(e => e.category === 'hero-fundos').length },
       { id: 'buttons-ctas', label: 'Botões & Ações', count: effects.filter(e => e.category === 'buttons-ctas').length },

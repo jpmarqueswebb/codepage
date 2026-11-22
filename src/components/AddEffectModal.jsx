@@ -16,7 +16,6 @@ export function AddEffectModal({ onClose, onSave }) {
   });
 
   const categories = [
-    { id: 'marcelo-cabral', label: 'Efeitos Marcelo Cabral' },
     { id: 'cards-borders', label: 'Cards & Bordas' },
     { id: 'hero-fundos', label: 'Heróis & Fundos' },
     { id: 'buttons-ctas', label: 'Botões & Ações' },

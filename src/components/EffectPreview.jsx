@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { vivianePreviews } from './VivianePreviews';
+import { vivianeVendasPreviews } from './VivianeVendasPreviews';
 import { Sparkles, ArrowRight, Check, Play, Eye } from 'lucide-react';
 
 export function EffectPreview({ effect, interactive = true }) {
   const type = effect.previewType;
 
-  const Vivi = vivianePreviews[type];
+  const Vivi = vivianePreviews[type] || vivianeVendasPreviews[type];
   if (Vivi) return <Vivi />;
 
   // --- 1. Canvas Filaments (Marcelo Cabral) ---
