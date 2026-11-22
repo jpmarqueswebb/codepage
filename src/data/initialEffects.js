@@ -1,3 +1,4 @@
+import { vivianeEffects } from './vivianeEffects';
 export const initialEffects = [
   {
     id: "marcelo-login-filaments",
@@ -867,5 +868,6 @@ export function BeforeAfterSlider() {
   <div class="absolute inset-0 flex items-center justify-center text-neutral-400 bg-neutral-900 w-1/2 border-r border-white">ANTES</div>
 </div>`
     }
-  }
+  },
+  ...vivianeEffects,
 ];
