@@ -61,6 +61,11 @@ export function EffectCard({ effect, onOpenDetail, onCopyPrompt, onCopyCode }) {
 
           {/* Tags */}
           <div className="flex flex-wrap gap-1.5 mt-3">
+            {effect.client && (
+              <span className="text-[10px] font-mono font-semibold text-black bg-white px-2 py-0.5 rounded">
+                {effect.client}
+              </span>
+            )}
             {effect.tags.slice(0, 3).map((tag, idx) => (
               <span
                 key={idx}

@@ -15,7 +15,10 @@ export default function App() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const byId = Object.fromEntries(initialEffects.map((e) => [e.id, e]));
+          return parsed.map((e) => (byId[e.id]?.client ? { ...e, client: byId[e.id].client } : e));
+        }
       }
     } catch (e) {
       console.error('Error loading effects from localStorage:', e);
@@ -67,7 +70,8 @@ export default function App() {
         eff.name.toLowerCase().includes(q) ||
         eff.description.toLowerCase().includes(q) ||
         eff.tags.some((t) => t.toLowerCase().includes(q)) ||
-        (eff.badge && eff.badge.toLowerCase().includes(q));
+        (eff.badge && eff.badge.toLowerCase().includes(q)) ||
+        (eff.client && eff.client.toLowerCase().includes(q));
       return matchCategory && matchSearch;
     });
   }, [effects, selectedCategory, search]);

@@ -1,5 +1,5 @@
 // Efeitos extraídos da página de vendas da Viviane Rocha (mentalidadedeaprovado.com.br)
-const B = { badge: "Vivi" };
+const B = { badge: "Vivi", client: "Viviane Rocha" };
 
 export const vivianeVendasEffects = [
   {
