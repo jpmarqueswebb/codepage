@@ -1,5 +1,6 @@
 import { vivianeEffects } from './vivianeEffects';
 import { vivianeVendasEffects } from './vivianeVendasEffects';
+import { uromedEffects } from './uromedEffects';
 
-// Catálogo: só efeitos da Vivi (página de links + página de vendas)
-export const initialEffects = [...vivianeEffects, ...vivianeVendasEffects];
+// Catálogo: Vivi (links + vendas) e Uromed
+export const initialEffects = [...vivianeEffects, ...vivianeVendasEffects, ...uromedEffects];
