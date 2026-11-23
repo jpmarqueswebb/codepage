@@ -18,7 +18,7 @@ export default function App() {
         if (Array.isArray(parsed) && parsed.length > 0) {
           const byId = Object.fromEntries(initialEffects.map((e) => [e.id, e]));
           const known = new Set(parsed.map((e) => e.id));
-          const merged = parsed.map((e) => (byId[e.id]?.client ? { ...e, client: byId[e.id].client } : e));
+          const merged = parsed.map((e) => (byId[e.id]?.client ? { ...e, client: byId[e.id].client, badge: byId[e.id].badge } : e));
           return merged.concat(initialEffects.filter((e) => !known.has(e.id)));
         }
       }
