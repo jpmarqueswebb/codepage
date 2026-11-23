@@ -3,12 +3,13 @@ import { vivianePreviews } from './VivianePreviews';
 import { vivianeVendasPreviews } from './VivianeVendasPreviews';
 import { uromedPreviews } from './UromedPreviews';
 import { dimasPreviews } from './DimasPreviews';
+import { golgotaPreviews } from './GolgotaPreviews';
 import { Sparkles, ArrowRight, Check, Play, Eye } from 'lucide-react';
 
 export function EffectPreview({ effect, interactive = true }) {
   const type = effect.previewType;
 
-  const Vivi = vivianePreviews[type] || vivianeVendasPreviews[type] || uromedPreviews[type] || dimasPreviews[type];
+  const Vivi = vivianePreviews[type] || vivianeVendasPreviews[type] || uromedPreviews[type] || dimasPreviews[type] || golgotaPreviews[type];
   if (Vivi) return <Vivi />;
 
   // --- 1. Canvas Filaments (Marcelo Cabral) ---
