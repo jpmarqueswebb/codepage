@@ -4,6 +4,7 @@ import { uromedEffects } from './uromedEffects';
 import { dimasEffects } from './dimasEffects';
 import { golgotaEffects } from './golgotaEffects';
 import { partiuProEffects } from './partiuProEffects';
+import { joaoPedroEffects } from './joaoPedroEffects';
 
-// Catálogo: Vivi (links + vendas), Uromed, Dr. Dimas Melão, Projeto Golgota e Partiu Pro
-export const initialEffects = [...vivianeEffects, ...vivianeVendasEffects, ...uromedEffects, ...dimasEffects, ...golgotaEffects, ...partiuProEffects];
+// Catálogo: Vivi (links + vendas), Uromed, Dr. Dimas Melão, Projeto Golgota, Partiu Pro e João Pedro Marques (Nossa LP)
+export const initialEffects = [...vivianeEffects, ...vivianeVendasEffects, ...uromedEffects, ...dimasEffects, ...golgotaEffects, ...partiuProEffects, ...joaoPedroEffects];
