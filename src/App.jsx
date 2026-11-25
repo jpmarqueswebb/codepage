@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import { initialEffects } from './data/initialEffects';
+import { categories as sectionCategories } from './data/categories';
+import { buildPrompt } from './utils/buildPrompt';
 import { EffectCard } from './components/EffectCard';
 import { PromptModal } from './components/PromptModal';
 import { DetailModal } from './components/DetailModal';
@@ -18,7 +20,7 @@ export default function App() {
         if (Array.isArray(parsed) && parsed.length > 0) {
           const byId = Object.fromEntries(initialEffects.map((e) => [e.id, e]));
           const known = new Set(parsed.map((e) => e.id));
-          const merged = parsed.map((e) => (byId[e.id]?.client ? { ...e, client: byId[e.id].client, badge: byId[e.id].badge } : e));
+          const merged = parsed.map((e) => byId[e.id] || e);
           return merged.concat(initialEffects.filter((e) => !known.has(e.id)));
         }
       }
@@ -54,11 +56,7 @@ export default function App() {
   const categories = useMemo(() => {
     return [
       { id: 'all', label: 'Todos os Efeitos', count: effects.length },
-      { id: 'cards-borders', label: 'Cards & Bordas', count: effects.filter(e => e.category === 'cards-borders').length },
-      { id: 'hero-fundos', label: 'Heróis & Fundos', count: effects.filter(e => e.category === 'hero-fundos').length },
-      { id: 'buttons-ctas', label: 'Botões & Ações', count: effects.filter(e => e.category === 'buttons-ctas').length },
-      { id: 'typography', label: 'Texto & Tipografia', count: effects.filter(e => e.category === 'typography').length },
-      { id: 'navigation', label: 'Modais & Menus', count: effects.filter(e => e.category === 'navigation').length },
+      ...sectionCategories.map((c) => ({ ...c, count: effects.filter((e) => e.category === c.id).length })),
     ];
   }, [effects]);
 
@@ -83,22 +81,7 @@ export default function App() {
     const finalSection = section || effect.defaultSection || 'Hero Principal';
     const code = effect.frameworks?.react || effect.code || '';
 
-    const promptText = `Chat, adicione este efeito no nosso site, exatamente na seção "${finalSection}":
-
-EFEITO: ${effect.name}
-CATEGORIA: ${effect.categoryLabel}
-DESCRIÇÃO VISUAL: ${effect.description}
-ESTILO: Neon Noir Monocromático de Alta Fidelidade (Fundo Preto Absoluto #000000, Acentos e Bordas em Branco Puro #FFFFFF, Sem IA Slop, 60fps).
-
-DIRETRIZES DE IMPLEMENTAÇÃO (UI UX PRO MAX v2.0):
-1. Insira os estilos/classes no elemento da seção "${finalSection}" sem alterar os dados reais já existentes.
-2. Mantenha os eventos e acessibilidade (contraste 4.5:1+, tags semânticas, suporte a prefers-reduced-motion).
-3. 100% responsivo para mobile e desktop.
-4. Curva de transição e animação refinada: cubic-bezier(0.16, 1, 0.3, 1).
-
---- CÓDIGO DO EFEITO COMPLETO PARA REPLICAR 100% IGUAL ---
-${code}
-`;
+    const promptText = buildPrompt({ effect, section: finalSection, code });
 
     navigator.clipboard.writeText(promptText);
 
@@ -133,18 +116,13 @@ ${code}
       
       {/* Hero Banner Showcase (Sem Header acima) */}
       <section className="relative border-b border-white/10 bg-gradient-to-b from-neutral-950/80 via-black to-black overflow-hidden pt-16 pb-14 px-4 sm:px-6 lg:px-8">
-        {/* Subtle Noir Grid Background */}
+        {/* Grade sutil de fundo */}
         <div className="absolute inset-0 noir-grid opacity-30 pointer-events-none" />
         
         {/* Ambient Top Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[650px] h-36 bg-white/5 blur-3xl pointer-events-none rounded-full" />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15 text-neutral-300 text-xs font-mono shadow-[0_0_25px_rgba(255,255,255,0.06)]">
-            <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#fff] animate-pulse" />
-            <span>Anti-IA Slop • Baseado no UI UX Pro Max v2.0</span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white font-['Space_Grotesk'] leading-[1.08]">
             O Acervo de Códigos e Efeitos das suas Páginas
           </h1>
@@ -152,23 +130,8 @@ ${code}
           <p className="max-w-2xl mx-auto text-sm sm:text-base text-neutral-400 leading-relaxed">
             Selecione qualquer código de efeito, defina a seção do site no card e clique em 
             <strong className="text-white font-semibold"> "Copiar Prompt para IA"</strong>. 
-            O prompt já sai formatado com as instruções para a IA replicar 100% igual.
+            O prompt já sai formatado para a IA aplicar o efeito com as cores do seu projeto.
           </p>
-
-          {/* Quick Metrics Bar */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-neutral-400">
-            <div className="flex items-center gap-2">
-              <span className="text-white font-bold">{effects.length}</span> Códigos & Efeitos
-            </div>
-            <div className="h-3 w-px bg-white/20" />
-            <div className="flex items-center gap-2">
-              <span className="text-white font-bold">100%</span> Neon Noir (Preto & Branco)
-            </div>
-            <div className="h-3 w-px bg-white/20" />
-            <div className="flex items-center gap-2">
-              <span className="text-white font-bold">60 FPS</span> Aceleração por Hardware
-            </div>
-          </div>
         </div>
       </section>
 
@@ -209,7 +172,7 @@ ${code}
           </div>
 
           {/* Categories Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pt-2 pb-1 no-scrollbar text-xs border-t border-white/5">
+          <div className="flex flex-wrap items-center gap-2 pt-3 text-xs border-t border-white/5">
             {categories.map((cat) => {
               const isActive = selectedCategory === cat.id;
               return (
@@ -272,9 +235,6 @@ ${code}
             <span className="font-bold text-white font-['Space_Grotesk']">CODEPAGE</span>
             <span>•</span>
             <span>Códigos & Efeitos para Landing Pages</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span>Desenvolvido com UI UX Pro Max Skill v2.0</span>
           </div>
         </div>
       </footer>

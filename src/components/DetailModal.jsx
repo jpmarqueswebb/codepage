@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, Copy, Check, Bot, Code, Sparkles, Layers, ShieldCheck, Play } from 'lucide-react';
+import { X, Copy, Check, Bot, Code, Sparkles, Layers, Play } from 'lucide-react';
 import { EffectPreview } from './EffectPreview';
+import { buildPrompt } from '../utils/buildPrompt';
 
 export function DetailModal({ effect, onClose, onCopyPrompt, onCopyCode }) {
   if (!effect) return null;
@@ -12,21 +13,7 @@ export function DetailModal({ effect, onClose, onCopyPrompt, onCopyCode }) {
   const reactCode = effect.frameworks?.react || effect.code || '';
   const tailwindCode = effect.frameworks?.tailwind || effect.code || '';
 
-  const promptText = `Chat, adicione este efeito no nosso site, exatamente na seção "${targetSection}":
-
-EFEITO: ${effect.name}
-CATEGORIA: ${effect.categoryLabel}
-DESCRIÇÃO: ${effect.description}
-ESTILO: Neon Noir Monocromático (Preto Puro #000000, Acentos em Branco Puro #FFFFFF, Sem IA Slop, 60fps).
-
-DIRETRIZES DE IMPLEMENTAÇÃO:
-1. Integre o código na seção informada sem quebrar os componentes existentes.
-2. Mantenha acessibilidade total (WCAG 4.5:1, touch target min 44px, prefers-reduced-motion).
-3. 100% responsivo para mobile e desktop.
-
---- CÓDIGO DO EFEITO ---
-${reactCode}
-`;
+  const promptText = buildPrompt({ effect, section: targetSection, code: reactCode });
 
   const handleCopyCurrent = () => {
     let contentToCopy = '';
@@ -162,17 +149,6 @@ ${reactCode}
                 <Layers className="w-3.5 h-3.5" />
                 HTML + Tailwind
               </button>
-              <button
-                onClick={() => setActiveTab('rules')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
-                  activeTab === 'rules'
-                    ? 'bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)]'
-                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                UI UX Pro Max
-              </button>
             </div>
 
             {/* Tab Contents */}
@@ -191,17 +167,6 @@ ${reactCode}
                 <pre className="p-4 rounded-xl bg-black border border-white/10 text-xs text-neutral-300 font-mono whitespace-pre-wrap max-h-72 overflow-y-auto leading-relaxed select-all">
                   {tailwindCode}
                 </pre>
-              )}
-              {activeTab === 'rules' && (
-                <div className="p-4 rounded-xl bg-black border border-white/10 text-xs text-neutral-300 space-y-3 leading-relaxed">
-                  <h5 className="font-bold text-white uppercase font-mono">Padrões UI UX Pro Max v2.0 Aplicados:</h5>
-                  <ul className="list-disc list-inside space-y-1.5 text-neutral-400">
-                    <li><strong className="text-white">Anti-AI Slop:</strong> Paleta estrita Neon Noir (Preto Absoluto #000000, Branco Puro #FFFFFF). Sem gradientes roxos genéricos.</li>
-                    <li><strong className="text-white">Taxa de Quadros:</strong> Animações aceleradas por GPU rodando a 60fps cravados.</li>
-                    <li><strong className="text-white">Acessibilidade:</strong> Contraste superior a 4.5:1 e respeito automático a <code className="text-white bg-white/10 px-1 rounded">prefers-reduced-motion</code>.</li>
-                    <li><strong className="text-white">Ergonomia Tátil:</strong> Área mínima de clique de 44x44px para dispositivos móveis.</li>
-                  </ul>
-                </div>
               )}
             </div>
           </div>

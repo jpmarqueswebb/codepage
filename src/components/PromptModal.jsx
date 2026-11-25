@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { buildPrompt } from '../utils/buildPrompt';
 import { X, Bot, Copy, Check, Sparkles, Terminal, FileCode } from 'lucide-react';
 
 export function PromptModal({ effect, targetSection, onClose, onCopyPrompt }) {
@@ -13,22 +14,13 @@ export function PromptModal({ effect, targetSection, onClose, onCopyPrompt }) {
     ? effect.frameworks?.react || effect.code 
     : effect.frameworks?.tailwind || effect.code;
 
-  const generatedPrompt = `Chat, adicione este efeito no nosso site, exatamente na seção "${section}":
-
-EFEITO: ${effect.name}
-CATEGORIA: ${effect.categoryLabel}
-DESCRIÇÃO DO EFEITO: ${effect.description}
-ESTILO VISUAL: Neon Noir / Monocromático de Alto Contraste (Fundo Preto Absoluto #000000, Acentos e Bordas em Branco Puro #FFFFFF, Sem IA Slop, 60fps).
-
-DIRETRIZES DE IMPLEMENTAÇÃO (UI UX PRO MAX):
-1. Integre o código abaixo na seção "${section}" preservando os elementos existentes da página.
-2. Garanta acessibilidade total (WCAG contrastes 4.5:1+, tags semânticas, suporte a prefers-reduced-motion).
-3. Garanta que o efeito seja 100% responsivo para mobile e desktop sem quebra de layout.
-4. Mantenha os eventos e animações com curvas fluidas cubic-bezier(0.16, 1, 0.3, 1).
-${extraInstructions ? `5. INSTRUÇÃO EXTRA DO USUÁRIO: ${extraInstructions}\n` : ''}
---- CÓDIGO DO EFEITO (${framework.toUpperCase()}) ---
-${codeSnippet}
-`;
+  const generatedPrompt = buildPrompt({
+    effect,
+    section,
+    code: codeSnippet,
+    format: framework === 'react' ? 'React + Tailwind' : 'HTML + Tailwind',
+    extra: extraInstructions,
+  });
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedPrompt);
@@ -148,7 +140,7 @@ ${codeSnippet}
         {/* Modal Footer */}
         <div className="p-5 border-t border-white/10 bg-neutral-950 flex items-center justify-between">
           <span className="text-xs text-neutral-400">
-            Fidelidade de 100% com estilo Neon Noir.
+            As cores seguem a paleta do projeto onde o efeito entrar.
           </span>
           <div className="flex items-center gap-3">
             <button
