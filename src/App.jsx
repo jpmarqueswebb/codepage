@@ -171,31 +171,36 @@ export default function App() {
             </div>
           </div>
 
-          {/* Categories Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-3 text-xs border-t border-white/5">
-            {categories.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? 'bg-white text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.3)]'
-                      : 'bg-neutral-950 text-neutral-400 border border-white/10 hover:text-white hover:border-white/30'
-                  }`}
-                >
-                  {cat.label}
-                  {cat.count !== undefined && (
-                    <span className={`ml-1.5 text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                      isActive ? 'bg-black/20 text-black' : 'bg-white/10 text-neutral-400'
-                    }`}>
-                      {cat.count}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+          {/* Filtro por seção da página */}
+          <div className="pt-4 border-t border-white/5">
+            <p className="text-[11px] font-mono uppercase tracking-wide text-neutral-500 mb-3">
+              Filtrar por seção da página
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
+              {categories.map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`flex items-center justify-between gap-2 min-w-0 px-3 py-2 rounded-lg text-xs text-left transition-colors cursor-pointer border ${
+                      isActive
+                        ? 'bg-white text-black font-semibold border-white'
+                        : 'text-neutral-400 border-transparent hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="truncate">{cat.label}</span>
+                    {cat.count !== undefined && (
+                      <span className={`shrink-0 text-[10px] font-mono tabular-nums ${
+                        isActive ? 'text-black/60' : 'text-neutral-600'
+                      }`}>
+                        {cat.count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
         </div>
@@ -209,7 +214,6 @@ export default function App() {
                 effect={effect}
                 onOpenDetail={(eff) => setActiveDetailModal(eff)}
                 onCopyPrompt={(eff, sec) => handleCopyPrompt(eff, sec)}
-                onCopyCode={(eff) => handleCopyCode(eff)}
               />
             ))}
           </div>
